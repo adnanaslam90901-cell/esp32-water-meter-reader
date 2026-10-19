@@ -1,0 +1,22 @@
+{
+  "digits": 8,
+  "decimal_places": 3,
+  "dataset": "Kaggle tapakah68/yandextoloka-water-meters-dataset",
+  "trained_at": "2026-09-14 16:15",
+  "accuracy": {
+    "test": {
+      "photos": 196,
+      "exact_percent": 77.0,
+      "whole_cubic_metres_percent": 89.8,
+      "counter_found_percent": 99.5,
+      "seconds_per_photo": 0.107
+    },
+    "val": {
+      "photos": 132,
+      "exact_percent": 71.2,
+      "whole_cubic_metres_percent": 85.6,
+      "counter_found_percent": 100.0,
+      "seconds_per_photo": 0.116
+    }
+  }
+}

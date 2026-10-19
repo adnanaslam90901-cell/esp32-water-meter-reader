@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ESP32 Meter Station</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header><div class="logo"><span>◉</span> ESP32 Meter Station</div><div id="serverState" class="state"><i></i> Server online</div></header>
+<main>
+  <section class="hero"><div><p class="overline">LIVE METER CAPTURE</p><h1>Water readings from your camera.</h1><p>ESP32-CAM photos are received, processed locally and stored with their detected reading.</p></div><div class="endpoint"><small>ESP32 upload endpoint</small><code id="endpoint"></code><button onclick="copyEndpoint()">Copy</button></div></section>
+  <section class="grid">
+    <article class="card live"><div class="cardhead"><div><small>LATEST CAPTURE</small><h2 id="latestTitle">Waiting for ESP32-CAM</h2></div><span id="latestTime">—</span></div><div id="photoBox" class="photo empty"><div><b>No image received yet</b><span>Send a JPEG to the endpoint or test with an upload.</span></div></div></article>
+    <aside class="card result"><div class="cardhead"><div><small>DETECTED VALUE</small><h2>Verify the reading</h2></div><span id="confidence" class="badge">—</span></div><label>Meter reading<input id="readingInput" inputmode="numeric" placeholder="00000000" disabled></label><div class="meta"><span>Meter ID</span><b id="meterId">—</b><span>ROI mode</span><b id="roiMode">—</b></div><button id="saveCorrection" class="primary" disabled>Save correction</button><p id="message"></p></aside>
+  </section>
+  <section class="card test"><div><small>MANUAL TEST</small><h2>Test before connecting the ESP32</h2><p>Upload one meter photo and confirm that the crop and OCR work.</p></div><form id="uploadForm"><input id="file" name="image" type="file" accept="image/jpeg,image/png" required><input id="manualMeter" value="test-meter" aria-label="Meter ID"><button class="primary" type="submit">Read image</button></form></section>
+  <section class="card batch">
+    <div class="sectionhead"><div><small>DATASET BATCH</small><h2>Read a whole dataset</h2><p>Choose a ZIP, a folder or many photos. Every photo is read and the results can be downloaded as Excel or CSV. If a labels CSV is included (like the Kaggle <code>data.csv</code>), each reading is checked against its expected value.</p></div></div>
+    <form id="batchForm" class="batchform">
+      <label class="pick"><input id="batchPick" type="file" accept=".zip,.csv,image/jpeg,image/png,image/bmp,image/webp" multiple><span>ZIP or photos</span></label>
+      <label class="pick"><input id="batchFolder" type="file" webkitdirectory multiple><span>Folder</span></label>
+      <span id="batchPicked" class="picked">Nothing selected</span>
+      <input id="batchMeter" value="dataset" aria-label="Meter ID for this batch">
+      <button id="batchStart" class="primary" type="submit" disabled>Start reading</button>
+    </form>
+    <div id="batchPanel" class="batchpanel" hidden>
+      <div class="batchtop"><div><small>BATCH <span id="batchNo"></span></small><h2 id="batchName"></h2></div><div class="batchactions"><span id="batchState" class="badge">—</span><button id="batchCancel" class="ghost" hidden>Cancel</button><a id="batchXlsx" class="export">Download Excel</a><a id="batchCsv" class="export light">Download CSV</a></div></div>
+      <div class="bar"><i id="batchBar"></i></div>
+      <div id="batchSummary" class="summary"></div>
+      <div class="batchfilter"><span id="batchCount"></span><select id="batchShow" aria-label="Filter batch readings"><option value="all">All readings</option><option value="low">Low confidence (check these)</option><option value="mismatch">Mismatches only</option><option value="empty">No reading</option></select></div>
+      <div class="tablewrap"><table><thead><tr><th>Image</th><th>Source file</th><th>Reading</th><th>Expected</th><th>Match</th><th>Confidence</th></tr></thead><tbody id="batchRows"></tbody></table></div>
+    </div>
+    <div class="tablewrap batchlist"><table><thead><tr><th>Batch</th><th>Photos</th><th>Accuracy</th><th>Status</th><th>Started</th><th></th></tr></thead><tbody id="batchList"><tr><td colspan="6" class="emptyrow">No batches yet.</td></tr></tbody></table></div>
+  </section>
+  <section class="card calibration"><div class="sectionhead"><div><small>FIXED-CAMERA CALIBRATION</small><h2>Reading-window area</h2><p>For a fixed ESP32-CAM, enter the display position as percentages of the complete image. Leave Auto enabled for handheld photos.</p></div><label class="switch"><input id="autoRoi" type="checkbox" checked><span></span> Auto</label></div><div class="roi-fields"><label>Left %<input id="roiX" type="number" min="0" max="99" value="20"></label><label>Top %<input id="roiY" type="number" min="0" max="99" value="35"></label><label>Width %<input id="roiW" type="number" min="1" max="100" value="60"></label><label>Height %<input id="roiH" type="number" min="1" max="100" value="25"></label><label>Decimal places<input id="decimalPlaces" type="number" min="0" max="5" value="0"></label><button id="saveConfig">Save calibration</button></div></section>
+  <section class="card history"><div class="sectionhead"><div><small>READING HISTORY</small><h2>Captured records</h2></div><div class="batchactions"><a class="export" href="/api/export.xlsx">Download Excel</a><a class="export light" href="/api/export.csv">Download CSV</a></div></div><div class="tablewrap"><table><thead><tr><th>Image</th><th>Meter</th><th>Reading</th><th>Confidence</th><th>Captured</th></tr></thead><tbody id="history"><tr><td colspan="5" class="emptyrow">No readings yet.</td></tr></tbody></table></div></section>
+</main><script src="/static/app.js"></script></body></html>

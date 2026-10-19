@@ -1,0 +1,8 @@
+# Only needed to retrain the models (training/train_meter_models.py). The app itself uses requirements.txt.
+# CPU-only PyTorch is enough:  pip install --index-url https://download.pytorch.org/whl/cpu torch
+torch>=2.4
+numpy
+opencv-python-headless
+onnx
+onnxscript
+onnxruntime

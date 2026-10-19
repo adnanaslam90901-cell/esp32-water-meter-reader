@@ -1,0 +1,12 @@
+.venv/
+.testenv/
+__pycache__/
+*.pyc
+data/readings.db
+data/config.json
+data/captures/*.jpg
+prepared_roi/
+.trainenv/
+data/batch_uploads/
+results/
+training/checkpoints/
